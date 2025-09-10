@@ -586,4 +586,10 @@ def get_pipeline_parser() -> argparse.ArgumentParser:
     parser.add_argument('--bypass-secret-acl', action='store_true', default=False,
                         help='Use to set the initial principal for secrets in standard-tier workspaces')
 
+    parser.add_argument('--database', action='store', default=None,
+                        help='Database name to export for the metastore and table ACLs. Single database name supported')
+                    
+    parser.add_argument('--iam', action='store',
+                        help='IAM Instance Profile to export metastore entires')
+
     return parser

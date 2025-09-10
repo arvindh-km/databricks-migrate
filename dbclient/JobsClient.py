@@ -31,8 +31,8 @@ class JobsClient(ClustersClient):
         # 'tasks' field) on API 2.0.
         res = self.get("/jobs/list", print_json, version='2.0')
         for job in res.get('jobs', []):
-            jobsById[job.get('job_id')] = job
-
+            if job.get('settings', {}).get('schedule', {}).get('pause_status', '') == 'UNPAUSED' or job.get('settings', {}).get('continuous', {}).get('pause_status', '') == 'UNPAUSED':
+                jobsById[job.get('job_id')] = job
         limit = 25 # max limit supported by the API
         offset = 0
         has_more = True
@@ -46,7 +46,8 @@ class JobsClient(ClustersClient):
             for job in res.get('jobs', []):
                 jobId = job.get('job_id')
                 # only replaces "real" MULTI_TASK jobs, as they contain the task definitions.
-                if jobsById[jobId]['settings'].get('format') == 'MULTI_TASK':
+                presentInJobsById = jobsById.get(jobId, None)
+                if presentInJobsById and jobsById[jobId]['settings'].get('format') == 'MULTI_TASK':
                     jobsById[jobId] = job
         return jobsById.values()
 

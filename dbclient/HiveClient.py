@@ -561,9 +561,17 @@ class HiveClient(ClustersClient):
                 return False
             # read that data using the dbfs rest endpoint which can handle 2MB of text easily
             read_args = {'path': '/tmp/migration/tmp_export_ddl.txt'}
-            read_resp = self.get('/dbfs/read', read_args)
+            offSet = 0
+            length = 999999
+            data_res = ''
+            while True:
+                read_resp = self.get(f'/dbfs/read?length={length}&offset={offSet}', read_args)
+                data_res += read_resp.get('data')
+                if int(read_resp.get('bytes_read')) >= length:
+                    offSet += length
+                else: break
             with open(table_ddl_path, "w", encoding="utf-8") as fp:
-                fp.write(base64.b64decode(read_resp.get('data')).decode('utf-8'))
+                fp.write(base64.b64decode(data_res).decode('utf-8'))
             return True
         else:
             export_ddl_cmd = 'print(ddl_str)'
