@@ -293,8 +293,15 @@ class MetastoreExportTask(AbstractTask):
         self.args = args
 
     def run(self):
+        print("Arguments:")
+        print(self.args)
         hive_c = HiveClient(self.client_config, self.checkpoint_service)
-        hive_c.export_hive_metastore(cluster_name=self.args.cluster_name,
+        if self.args.database is not None:
+            # export only a single database with a given iam role
+            database_name = self.args.database
+            hive_c.export_database(database_name, self.args.cluster_name, self.args.iam, has_unicode=self.args.metastore_unicode)
+        else:
+            hive_c.export_hive_metastore(cluster_name=self.args.cluster_name,
                                      has_unicode=self.args.metastore_unicode)
 
 
