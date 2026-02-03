@@ -1,3 +1,5 @@
+# Imports schemas to target workspace using CREATE SCHEMA commands
+# Replace schema_map with output from export_schema_s3.py
 import json
 
 schema_map = {

@@ -1,11 +1,16 @@
+# Updates S3 bucket paths and UC prefixes in exported metastore files for cross-region migration
 import os
+
+# Update these values before running
 schemas = ['dsp']
 path = 'export_dir/test/run2/metastore/'
 
+# Map source region buckets to target region buckets
 s3_buckets = {
     's3://swiggy-data-science-platform/': 's3://swiggy-data-science-platform-mumbai/',
     's3://swiggy-qubole/': 's3://swiggy-qubole-mumbai/',
 }
+# Map UC prefixes to target prefixes (removes UC-specific prefixes for Managed Tables)
 uc_prefix = {
     '__unitystorage': 'uc_tables'
 }

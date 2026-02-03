@@ -1,9 +1,11 @@
+# Exports schema creation commands with S3 locations
 import json
 
 schemas = [i.databaseName for i in spark.sql('show schemas in prod').collect()]
 
 schema_commands = {}
 
+# Update with schemas to export (empty list exports all schemas)
 schemas_to_filter = ['data_science_prod']
 schemas = [schema for schema in schemas if schema in schemas_to_filter]
 
