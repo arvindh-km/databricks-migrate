@@ -533,7 +533,14 @@ class HiveClient(ClustersClient):
         :param has_unicode: export to a file if this flag is true
         :return: True for success, False for error
         """
-        set_ddl_str_cmd = f'ddl_str = spark.sql("show create table {db_name}.{table_name}").collect()[0][0]'
+        set_ddl_str_cmd = f'''
+ddl_str = spark.sql("show create table {db_name}.{table_name}").collect()[0][0]
+if 'LOCATION' not in ddl_str:
+    path = spark.sql("DESCRIBE DETAIL {db_name}.{table_name}").select("location").collect()[0][0]
+    ddl_str = ddl_str.replace("""TBLPROPERTIES (""","LOCATION '"+path+ """'\nTBLPROPERTIES (""",1)
+else:
+    ddl_str = ddl_str
+'''
         ddl_str_resp = self.submit_command(cid, ec_id, set_ddl_str_cmd)
 
         if ddl_str_resp['resultType'] != 'text':

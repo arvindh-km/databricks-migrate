@@ -340,7 +340,10 @@ class MetastoreTableACLExportTask(AbstractTask):
 
     def run(self):
         table_acls_c = TableACLsClient(self.client_config, self.checkpoint_service)
-        notebook_exit_value = table_acls_c.export_table_acls(db_name='')
+        if self.args.database is not None:
+            notebook_exit_value = table_acls_c.export_table_acls(db_name=self.args.database, cluster_name=self.args.cluster_name)
+        else:
+            notebook_exit_value= table_acls_c.export_table_acls(db_name='', cluster_name=self.args.cluster_name)
         if notebook_exit_value['num_errors'] == 0:
             print("Table ACL export completed successfully without errors")
         elif notebook_exit_value['num_errors'] == -1:

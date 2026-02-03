@@ -219,7 +219,7 @@ class TableACLsClient(ClustersClient):
 
         return notebook_exit_value
 
-    def export_table_acls(self, db_name='', table_alcs_dir='table_acls/'):
+    def export_table_acls(self, db_name='', table_alcs_dir='table_acls/', cluster_name=None):
         """Exports all table ACLs or just for a single database
 
         :param db_name: if set to empty strins, export ACLs for all databases
@@ -229,7 +229,10 @@ class TableACLsClient(ClustersClient):
         # TODO check whether this logic supports unicode (metadata had to do something to support it
 
         # as the IAM role is not used for Table ACLS, only metastore access required
-        cid = self.launch_cluster(iam_role=None, enable_table_acls=True)
+        if cluster_name:
+            cid = self.start_cluster_by_name(cluster_name)
+        else:
+            cid = self.launch_cluster(iam_role=None, enable_table_acls=True)
         self.wait_for_cluster(cid)
 
         user_name = self.get_current_username(must_be_admin=True)
