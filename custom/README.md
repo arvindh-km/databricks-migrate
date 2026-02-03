@@ -14,9 +14,10 @@ This migration process allows you to:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/arvindh-km/databricks-migrate.git
+   git clone -b updates https://github.com/arvindh-km/databricks-migrate.git
    cd databricks-migrate
    ```
+   **Note:** Make sure to clone the `updates` branch as it contains the latest migration scripts and fixes.
 
 2. **Install Databricks CLI**
    - Using Homebrew: `brew install databricks-cli`
