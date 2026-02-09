@@ -16,6 +16,6 @@ for schema in schemas:
         if i.database_description_item == 'Catalog Name': catalog = i.database_description_value
         if i.database_description_item == 'Namespace Name': name = i.database_description_value
         if i.database_description_item == 'RootLocation': location = i.database_description_value
-    schema_commands[schema] = f"CREATE SCHEMA IF NOT EXISTS {catalog}.{name} LOCATION '{location}'"
+    schema_commands[schema] = f"CREATE SCHEMA IF NOT EXISTS {catalog}.{name} MANAGED LOCATION '{location}'"
 
 print(json.dumps(schema_commands, indent=4))
