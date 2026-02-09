@@ -535,7 +535,7 @@ class HiveClient(ClustersClient):
         """
         set_ddl_str_cmd = f'''
 ddl_str = spark.sql("show create table {db_name}.{table_name}").collect()[0][0]
-if 'LOCATION' not in ddl_str:
+if 'LOCATION' not in ddl_str and 'CREATE VIEW' not in ddl_str:
     path = spark.sql("DESCRIBE DETAIL {db_name}.{table_name}").select("location").collect()[0][0]
     ddl_str = ddl_str.replace("""TBLPROPERTIES (""","LOCATION '"+path+ """'\nTBLPROPERTIES (""",1)
 else:
