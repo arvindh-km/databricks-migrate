@@ -592,4 +592,7 @@ def get_pipeline_parser() -> argparse.ArgumentParser:
     parser.add_argument('--iam', action='store',
                         help='IAM Instance Profile to export metastore entires')
 
+    parser.add_argument('--include-schema', action='store_true', default=False,
+                        help='Include schemas during import.')
+
     return parser

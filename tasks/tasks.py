@@ -323,7 +323,8 @@ class MetastoreImportTask(AbstractTask):
         hive_c.import_hive_metastore(cluster_name=self.args.cluster_name,
                                      has_unicode=self.args.metastore_unicode,
                                      should_repair_table=self.args.repair_metastore_tables,
-                                     sort_views = self.args.sort_views)
+                                     sort_views = self.args.sort_views,
+                                     include_schema = self.args.include_schema)
 
 
 class MetastoreTableACLExportTask(AbstractTask):

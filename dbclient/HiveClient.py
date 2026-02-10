@@ -363,7 +363,7 @@ class HiveClient(ClustersClient):
         return False
 
     def import_hive_metastore(self, cluster_name=None, metastore_dir='metastore/', views_dir='metastore_views/',
-                              has_unicode=False, should_repair_table=False, sort_views=False):
+                              has_unicode=False, should_repair_table=False, sort_views=False, include_schema=False):
         metastore_local_dir = self.get_export_dir() + metastore_dir
         metastore_view_dir = self.get_export_dir() + views_dir
         error_logger = logging_utils.get_error_logger(
@@ -388,11 +388,14 @@ class HiveClient(ClustersClient):
             if not database_attributes:
                 logging.info(all_db_details_json)
                 raise ValueError('Missing Database Attributes Log. Re-run metastore export')
-            create_db_resp = self.create_database_db(db_name, ec_id, cid, database_attributes)
-            if logging_utils.log_response_error(error_logger, create_db_resp):
-                logging.error(f"Failed to create database {db_name} during metastore import. Check "
-                              f"failed_import_metastore.log for more details.")
-                continue
+            print(include_schema, "This is here")
+            process.exit(1)
+            if include_schema:
+                create_db_resp = self.create_database_db(db_name, ec_id, cid, database_attributes)
+                if logging_utils.log_response_error(error_logger, create_db_resp):
+                    logging.error(f"Failed to create database {db_name} during metastore import. Check "
+                                  f"failed_import_metastore.log for more details.")
+                    continue
             db_path = database_attributes.get('Location')
             if os.path.isdir(local_db_path):
                 # all databases should be directories, no files at this level
