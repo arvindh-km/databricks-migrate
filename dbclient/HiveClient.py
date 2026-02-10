@@ -388,8 +388,6 @@ class HiveClient(ClustersClient):
             if not database_attributes:
                 logging.info(all_db_details_json)
                 raise ValueError('Missing Database Attributes Log. Re-run metastore export')
-            print(include_schema, "This is here")
-            process.exit(1)
             if include_schema:
                 create_db_resp = self.create_database_db(db_name, ec_id, cid, database_attributes)
                 if logging_utils.log_response_error(error_logger, create_db_resp):
